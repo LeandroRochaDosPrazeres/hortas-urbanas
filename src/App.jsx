@@ -39,7 +39,7 @@ function App() {
         <Header />
 
         {/* O conteúdo principal da página é renderizado aqui */}
-        <main className="flex-grow container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <main className="flex-grow min-w-0 [overflow-wrap:anywhere] container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
           <Routes>
             {/* Rotas da Semana 1 */}
             <Route path="/" element={<HomePage />} />

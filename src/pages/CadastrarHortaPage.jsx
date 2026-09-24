@@ -62,9 +62,9 @@ const CadastrarHortaPage = () => {
       
       {terrenoInfo && (
         <Card className="mb-6 bg-gray-800 border-green-500/30">
-          <div className="flex gap-4 items-center">
-            <img src={terrenoInfo.imageUrl} alt="Horta" className="w-24 h-24 rounded-lg object-cover" />
-            <div>
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+            <img src={terrenoInfo.imageUrl} alt="Horta" className="w-24 h-24 shrink-0 rounded-lg object-cover" />
+            <div className="min-w-0">
               <h2 className="text-xl font-bold text-white">{terrenoInfo.titulo}</h2>
               <p className="text-gray-400 text-sm">{terrenoInfo.endereco}</p>
             </div>
