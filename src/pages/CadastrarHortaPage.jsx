@@ -10,6 +10,8 @@ const CadastrarHortaPage = () => {
   
   const [loading, setLoading] = useState(false);
   const [terrenoInfo, setTerrenoInfo] = useState(null);
+  const [carregandoTerreno, setCarregandoTerreno] = useState(true);
+  const [error, setError] = useState('');
   
   const [esgData, setEsgData] = useState({
     areaM2: '',
@@ -23,19 +25,31 @@ const CadastrarHortaPage = () => {
 
   // Carrega as informações do terreno para conferência
   useEffect(() => {
+    let ativo = true;
     const fetchTerreno = async () => {
       if (!id) return;
-      const docRef = doc(db, "terrenos", id);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setTerrenoInfo(docSnap.data());
+      setCarregandoTerreno(true);
+      setTerrenoInfo(null);
+      setError('');
+      try {
+        const docSnap = await getDoc(doc(db, "terrenos", id));
+        if (!ativo) return;
+        if (docSnap.exists()) setTerrenoInfo(docSnap.data());
+        else setError('Terreno não encontrado. Selecione outro no mapa.');
+      } catch {
+        if (ativo) setError('Não foi possível carregar o terreno. Volte ao mapa e tente novamente.');
+      } finally {
+        if (ativo) setCarregandoTerreno(false);
       }
     };
     fetchTerreno();
+    return () => { ativo = false; };
   }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!terrenoInfo || carregandoTerreno || loading) return;
+    setError('');
     setLoading(true);
     try {
       const docRef = doc(db, "terrenos", id);
@@ -49,12 +63,15 @@ const CadastrarHortaPage = () => {
       navigate('/mapa');
     } catch (error) {
       console.error("Erro ao salvar:", error);
+      setError('Não foi possível salvar o relatório. Seus campos foram mantidos; tente novamente.');
     } finally {
       setLoading(false);
     }
   };
 
   if (!id) return <div className="p-10 text-center">Por favor, selecione uma horta no mapa primeiro.</div>;
+  if (carregandoTerreno) return <p role="status" className="p-10 text-center">Carregando terreno...</p>;
+  if (!terrenoInfo) return <p role="alert" className="p-10 text-center text-red-400">{error}</p>;
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
@@ -97,6 +114,7 @@ const CadastrarHortaPage = () => {
           </div>
         </Card>
 
+        {error && <p role="alert" className="md:col-span-2 text-red-400">{error}</p>}
         <div className="md:col-span-2 flex justify-end gap-4 mt-4">
           <Button type="button" variant="secondary" onClick={() => navigate('/mapa')}>Cancelar</Button>
           <Button type="submit" variant="primary" disabled={loading}>
