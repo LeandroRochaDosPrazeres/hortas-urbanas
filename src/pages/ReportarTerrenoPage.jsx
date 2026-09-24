@@ -40,8 +40,12 @@ const ReportarTerrenoPage = () => {
     setError("");
     setMensagem("");
     if (!currentUser) return setError("Você precisa estar logado.");
-    if (!titulo || !endereco || !imagem) return setError("Preencha os campos obrigatórios.");
-    if (!localizacao) return setError("Marque a localização do terreno no mapa.");
+    const camposPendentes = [];
+    if (!titulo.trim()) camposPendentes.push("título");
+    if (!endereco.trim()) camposPendentes.push("endereço");
+    if (!imagem) camposPendentes.push("foto do terreno");
+    if (!localizacao) camposPendentes.push("localização no mapa");
+    if (camposPendentes.length) return setError(`Campos obrigatórios pendentes: ${camposPendentes.join(", ")}.`);
 
     setLoading(true);
     try {
@@ -73,8 +77,8 @@ const ReportarTerrenoPage = () => {
       <PageTitle>Reportar Novo Terreno</PageTitle>
       <Card>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input placeholder="Título" value={titulo} onChange={(e)=>setTitulo(e.target.value)} />
-          <Input placeholder="Endereço" value={endereco} onChange={(e)=>setEndereco(e.target.value)} />
+          <Input label="Título (obrigatório)" placeholder="Título" value={titulo} onChange={(e)=>setTitulo(e.target.value)} />
+          <Input label="Endereço (obrigatório)" placeholder="Endereço" value={endereco} onChange={(e)=>setEndereco(e.target.value)} />
           <fieldset disabled={loading} className="space-y-2">
             <legend className="font-medium">Localização do terreno (obrigatória)</legend>
             <p className="text-sm text-gray-300">
@@ -98,13 +102,16 @@ const ReportarTerrenoPage = () => {
           </div>
 
           <Textarea placeholder="Descrição" value={descricao} onChange={(e)=>setDescricao(e.target.value)} rows={3} />
-          <FileInput onChange={(e) => setImagem(e.target.files[0])} />
+          <label className="block space-y-2">
+            <span className="text-sm text-gray-300">Foto do terreno (obrigatória)</span>
+            <FileInput onChange={(e) => setImagem(e.target.files[0])} />
+          </label>
           
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Enviando..." : "Enviar Relatório ESG"}
           </Button>
           {mensagem && <p className="text-green-400 text-center">{mensagem}</p>}
-          {error && <p className="text-red-400 text-center">{error}</p>}
+          {error && <p role="alert" className="text-red-400 text-center">{error}</p>}
         </form>
       </Card>
     </div>
