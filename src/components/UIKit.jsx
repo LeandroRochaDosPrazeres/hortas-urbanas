@@ -95,7 +95,7 @@ export const Header = () => {
               <div className="flex items-center gap-3 pl-4 border-l border-gray-700">
                 <div className="text-right">
                   <p className="text-xs text-gray-400 leading-none">Olá,</p>
-                  <p className="text-sm font-medium text-white">{currentUser.nome?.split(' ')[0]}</p>
+                  <p title={currentUser.nome} className="max-w-24 truncate text-sm font-medium text-white">{currentUser.nome?.split(' ')[0]}</p>
                 </div>
                 <Button onClick={logout} variant="ghost" size="sm" className="text-red-400 hover:text-red-300">
                   Sair
@@ -142,7 +142,7 @@ export const Header = () => {
           )}
           <div className="pt-4 border-t border-gray-800">
             {currentUser ? (
-              <button onClick={() => { logout(); toggleMenu(); }} className="w-full text-left px-3 py-2 text-red-400 font-medium">
+              <button onClick={() => { logout(); toggleMenu(); }} className="w-full text-left px-3 py-2 text-red-400 font-medium [overflow-wrap:anywhere]">
                 Sair ({currentUser.email})
               </button>
             ) : (
