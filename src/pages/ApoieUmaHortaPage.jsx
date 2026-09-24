@@ -78,7 +78,7 @@ const ApoieUmaHortaPage = () => {
           type="email"
           placeholder="O seu melhor e-mail"
           value={email}
-          onChange={(e) => setEmail(e.g.etvalue)}
+          onChange={(e) => setEmail(e.target.value)}
           disabled={loading}
         />
         <Textarea
