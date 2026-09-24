@@ -4,6 +4,10 @@ import { getPlantaById } from '../services/firestoreService.js';
 import { Card, PageTitle, Button } from '../components/UIKit.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 
+const possuiMetrica = (valor) =>
+  (typeof valor === 'number' || typeof valor === 'string') &&
+  String(valor).trim() !== '' && Number.isFinite(Number(valor)) && Number(valor) >= 0;
+
 const PlantaDetailPage = () => {
   const { id } = useParams();
   const { currentUser } = useAuth();
@@ -27,6 +31,9 @@ const PlantaDetailPage = () => {
 
   if (loading) return <div className="p-10 text-center text-green-500">Carregando...</div>;
   if (!planta) return <div className="p-10 text-center">Planta não encontrada.</div>;
+  const temCo2 = possuiMetrica(planta.co2Evitado);
+  const temPeso = possuiMetrica(planta.pesoMedio);
+  const temEpoca = typeof planta.epoca === 'string' && planta.epoca.trim() !== '';
 
   return (
     <div className="max-w-5xl mx-auto py-6 px-4">
@@ -66,20 +73,20 @@ const PlantaDetailPage = () => {
           <p className="text-gray-300 text-lg leading-relaxed">{planta.descricao}</p>
 
           {/* GRID DE MÉTRICAS ESG (A base do seu projeto) */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <div className="bg-gray-800 p-4 rounded-xl border-l-4 border-green-500">
+          {(temCo2 || temPeso || temEpoca) && <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {temCo2 && <div className="bg-gray-800 p-4 rounded-xl border-l-4 border-green-500">
               <span className="text-[10px] text-gray-400 uppercase">CO₂ Evitado</span>
               <p className="text-2xl font-black text-white">{planta.co2Evitado}g</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-xl border-l-4 border-blue-500">
+            </div>}
+            {temPeso && <div className="bg-gray-800 p-4 rounded-xl border-l-4 border-blue-500">
               <span className="text-[10px] text-gray-400 uppercase">Peso Médio</span>
               <p className="text-2xl font-black text-white">{planta.pesoMedio}kg</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-xl border-l-4 border-yellow-500">
+            </div>}
+            {temEpoca && <div className="bg-gray-800 p-4 rounded-xl border-l-4 border-yellow-500">
               <span className="text-[10px] text-gray-400 uppercase">Época</span>
               <p className="text-lg font-bold text-white">{planta.epoca}</p>
-            </div>
-          </div>
+            </div>}
+          </div>}
 
           {/* GUIA DE MANUTENÇÃO */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
