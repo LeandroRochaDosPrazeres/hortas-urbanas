@@ -19,14 +19,14 @@ import {
 
 // --- FUNÇÕES REAIS DO FIRESTORE ---
 
-export const criarPost = (uid, emailUsuario, texto) => {
+export const criarPost = (uid, nomeUsuario, texto) => {
   // 1. Aponta para a "coleção" (gaveta) 'posts'
   const postsCollectionRef = collection(db, 'posts');
   
   // 2. Adiciona um novo "documento" (ficheiro) nessa gaveta
   return addDoc(postsCollectionRef, {
     uid: uid,
-    autorEmail: emailUsuario,
+    autorNome: nomeUsuario?.trim() || 'Participante da comunidade',
     texto: texto,
     criadoEm: serverTimestamp() // <-- MUDADO: Usar a data do servidor
   });

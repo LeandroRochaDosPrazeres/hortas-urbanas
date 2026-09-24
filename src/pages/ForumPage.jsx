@@ -37,7 +37,7 @@ const ForumPage = () => {
     }
     setLoading(true); 
     try {
-      await criarPost(currentUser.uid, currentUser.email, novoPost);
+      await criarPost(currentUser.uid, currentUser.nome || currentUser.displayName, novoPost);
       setNovoPost(''); 
     } catch (error) {
       console.error("Erro ao criar post:", error);
@@ -118,7 +118,7 @@ const ForumPage = () => {
               {post.texto}
             </p>
             <small className="text-gray-500">
-              Por: {post.autorEmail} - 
+              Por: {post.autorNome?.trim() || 'Participante da comunidade'} -{' '}
               {post.criadoEm ? post.criadoEm.toDate().toLocaleString('pt-BR') : '...'}
             </small>
           </Card>
