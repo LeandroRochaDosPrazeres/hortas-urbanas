@@ -56,8 +56,9 @@ const AdminUsersPage = () => {
         {loading && <p role="status">Carregando usuários...</p>}
         {error && <p role="alert" className="mb-4 text-red-400">{error}</p>}
         {!loading && !error && usuarios.length === 0 && <p>Nenhum usuário encontrado.</p>}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-gray-300">
+        <div role="region" aria-label="Lista de usuários; role horizontalmente para ver todas as colunas" tabIndex={0}
+          className="overflow-x-auto focus:outline-none focus:ring-2 focus:ring-green-500">
+          <table className="w-full min-w-[36rem] text-left text-gray-300 [&_th]:pr-4 [&_td]:pr-4">
             <thead>
               <tr className="border-b border-gray-700">
                 <th className="py-3">Nome</th>
