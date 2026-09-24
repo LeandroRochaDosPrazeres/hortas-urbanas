@@ -9,6 +9,7 @@ const ManutencaoPage = () => {
   // --- NOVOS ESTADOS ---
   const [guias, setGuias] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   // --- NOVO EFEITO PARA BUSCAR DADOS ---
   useEffect(() => {
@@ -19,6 +20,7 @@ const ManutencaoPage = () => {
         setGuias(dados);
       } catch (error) {
         console.error("Erro ao buscar guias:", error);
+        setError('Não foi possível carregar os guias. Recarregue a página para tentar novamente.');
       } finally {
         setLoading(false);
       }
@@ -41,7 +43,8 @@ const ManutencaoPage = () => {
           <p className="text-gray-400 text-center">Carregando guias...</p>
         )}
         
-        {!loading && guias.length === 0 && (
+        {error && <p role="alert" className="text-center text-red-400">{error}</p>}
+        {!loading && !error && guias.length === 0 && (
            <p className="text-gray-400 text-center">Nenhum guia encontrado.</p>
         )}
 

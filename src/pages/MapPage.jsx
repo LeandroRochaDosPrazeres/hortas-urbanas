@@ -34,6 +34,7 @@ const MapPage = () => {
 
   const [terrenos, setTerrenos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchTerrenos = async () => {
@@ -48,6 +49,7 @@ const MapPage = () => {
         setTerrenos(terrenosComCoords);
       } catch (error) {
         console.error("Erro ao carregar mapa:", error);
+        setError('Não foi possível carregar os locais. Recarregue a página para tentar novamente.');
       } finally {
         setLoading(false);
       }
@@ -60,6 +62,8 @@ const MapPage = () => {
       <div className="p-4">
         <h2 className="text-xl font-bold mb-4 text-white">Mapa de Hortas e Terrenos</h2>
         {loading && <p role="status" className="mb-4 text-gray-300">Carregando locais...</p>}
+        {error && <p role="alert" className="mb-4 text-red-400">{error}</p>}
+        {!loading && !error && terrenos.length === 0 && <p className="mb-4 text-gray-300">Nenhum local com coordenadas disponível.</p>}
         
         <div className="w-full h-[500px] bg-gray-800 rounded-xl overflow-hidden relative border border-gray-700 shadow-2xl">
           <MapContainer 

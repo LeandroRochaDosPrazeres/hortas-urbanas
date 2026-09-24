@@ -33,7 +33,7 @@ export const criarPost = (uid, nomeUsuario, texto) => {
 };
 
 // --- NOVA FUNÇÃO PARA LER OS POSTS ---
-export const getPostsSnapshot = (callback) => {
+export const getPostsSnapshot = (callback, onError) => {
   // 1. Aponta para a coleção 'posts'
   const postsCollectionRef = collection(db, 'posts');
 
@@ -49,7 +49,7 @@ export const getPostsSnapshot = (callback) => {
     });
     // 4. Envia os posts de volta para o componente
     callback(posts);
-  });
+  }, onError);
 
   // 5. Retorna a função 'unsubscribe' (para parar de escutar)
   return unsubscribe;
@@ -91,7 +91,7 @@ export const getGuiaById = async (id) => {
   } else {
     // 4. Se não, joga um erro
     console.error("Guia não encontrado!");
-    throw new Error("Documento não encontrado");
+    throw Object.assign(new Error("Documento não encontrado"), { code: 'not-found' });
   }
 };
 
@@ -144,7 +144,7 @@ export const getPlantaById = async (id) => {
     return { id: docSnap.id, ...docSnap.data() }; // Retorna com o ID
   } else {
     console.error("Planta não encontrada!");
-    throw new Error("Documento não encontrado");
+    throw Object.assign(new Error("Documento não encontrado"), { code: 'not-found' });
   }
 };
 

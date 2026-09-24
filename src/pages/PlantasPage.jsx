@@ -10,6 +10,7 @@ const PlantasPage = () => {
   const navigate = useNavigate();
   const [plantas, setPlantas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   // --- 2. BUSCA DE DADOS ---
   useEffect(() => {
@@ -20,6 +21,7 @@ const PlantasPage = () => {
         setPlantas(dados);
       } catch (error) {
         console.error("Erro ao buscar plantas:", error);
+        setError('Não foi possível carregar as plantas. Recarregue a página para tentar novamente.');
       } finally {
         setLoading(false);
       }
@@ -73,7 +75,8 @@ const PlantasPage = () => {
         </div>
       ) : (
         <div className="space-y-12">
-          {categoriasOrdenadas.length === 0 && (
+          {error && <p role="alert" className="text-center text-red-400">{error}</p>}
+          {!error && categoriasOrdenadas.length === 0 && (
             <p className="text-center text-gray-500 py-10">Nenhuma planta encontrada no banco de dados.</p>
           )}
 

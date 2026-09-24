@@ -12,12 +12,16 @@ const ForumPage = () => {
   const [loading, setLoading] = useState(false); 
   const [loadingPosts, setLoadingPosts] = useState(true); 
   const [error, setError] = useState(null);
+  const [erroLeitura, setErroLeitura] = useState('');
 
   // Efeito para carregar os posts (sem mudanças)
   useEffect(() => {
     setLoadingPosts(true);
     const unsubscribe = getPostsSnapshot((novosPosts) => {
       setPosts(novosPosts); 
+      setLoadingPosts(false);
+    }, () => {
+      setErroLeitura('Não foi possível carregar as publicações. Recarregue a página para tentar novamente.');
       setLoadingPosts(false);
     });
     return () => unsubscribe();
@@ -91,7 +95,8 @@ const ForumPage = () => {
         
         {loadingPosts && <p className="text-gray-400">A carregar publicações...</p>}
         
-        {!loadingPosts && posts.length === 0 && (
+        {erroLeitura && <p role="alert" className="text-red-400">{erroLeitura}</p>}
+        {!loadingPosts && !erroLeitura && posts.length === 0 && (
           <p className="text-gray-400">Nenhuma publicação ainda. Seja o primeiro!</p>
         )}
 

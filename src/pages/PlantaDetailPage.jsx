@@ -14,22 +14,30 @@ const PlantaDetailPage = () => {
   const navigate = useNavigate();
   const [planta, setPlanta] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
+    let ativo = true;
     const fetchPlanta = async () => {
+      setLoading(true);
+      setPlanta(null);
+      setError('');
       try {
         const dados = await getPlantaById(id);
-        setPlanta(dados);
+        if (ativo) setPlanta(dados);
       } catch (error) {
         console.error("Erro ao carregar:", error);
+        if (ativo && error.code !== 'not-found') setError('Não foi possível carregar a planta. Recarregue a página para tentar novamente.');
       } finally {
-        setLoading(false);
+        if (ativo) setLoading(false);
       }
     };
     fetchPlanta();
+    return () => { ativo = false; };
   }, [id]);
 
   if (loading) return <div className="p-10 text-center text-green-500">Carregando...</div>;
+  if (error) return <p role="alert" className="p-10 text-center text-red-400">{error}</p>;
   if (!planta) return <div className="p-10 text-center">Planta não encontrada.</div>;
   const temCo2 = possuiMetrica(planta.co2Evitado);
   const temPeso = possuiMetrica(planta.pesoMedio);

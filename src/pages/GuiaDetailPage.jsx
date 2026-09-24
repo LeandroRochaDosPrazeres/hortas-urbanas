@@ -11,25 +11,30 @@ const GuiaDetailPage = () => {
   // --- NOVOS ESTADOS ---
   const [guia, setGuia] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   // --- NOVO EFEITO PARA BUSCAR DADOS ---
   useEffect(() => {
+    let ativo = true;
     const fetchGuia = async () => {
+      setGuia(null);
+      setError('');
       try {
         setLoading(true);
         const dados = await getGuiaById(id);
-        setGuia(dados);
+        if (ativo) setGuia(dados);
       } catch (error) {
         console.error("Erro ao buscar guia:", error);
-        // Poderíamos tratar o erro (ex: setErro(true))
+        if (ativo && error.code !== 'not-found') setError('Não foi possível carregar o guia. Recarregue a página para tentar novamente.');
       } finally {
-        setLoading(false);
+        if (ativo) setLoading(false);
       }
     };
 
     if (id) {
       fetchGuia();
     }
+    return () => { ativo = false; };
   }, [id]); // Roda sempre que o 'id' da URL mudar
   // --- FIM DA NOVA SEÇÃO ---
 
@@ -44,6 +49,8 @@ const GuiaDetailPage = () => {
       </div>
     );
   }
+
+  if (error) return <p role="alert" className="text-center text-red-400">{error}</p>;
 
   // Se terminou de carregar e o guia não foi encontrado
   if (!guia) {
