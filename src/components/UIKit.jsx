@@ -211,12 +211,20 @@ export const Input = ({ label, className = "", ...props }) => {
   ) : input;
 };
 
-export const Textarea = ({ className = "", ...props }) => (
-  <textarea
-    className={`w-full px-4 py-3 bg-gray-700 text-white border border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent ${className}`}
-    {...props}
-  />
-);
+export const Textarea = ({ label, className = "", ...props }) => {
+  const textarea = (
+    <textarea
+      className={`w-full px-4 py-3 bg-gray-700 text-white border border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent ${className}`}
+      {...props}
+    />
+  );
+  return label ? (
+    <label className="block space-y-2">
+      <span className="text-sm text-gray-300">{label}</span>
+      {textarea}
+    </label>
+  ) : textarea;
+};
 
 export const FileInput = ({ className = "", onChange, disabled }) => (
   <input

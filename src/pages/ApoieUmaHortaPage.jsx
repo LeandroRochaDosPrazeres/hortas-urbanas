@@ -68,6 +68,7 @@ const ApoieUmaHortaPage = () => {
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
+          label="Nome completo"
           type="text"
           placeholder="O seu nome completo"
           value={nome}
@@ -75,6 +76,7 @@ const ApoieUmaHortaPage = () => {
           disabled={loading}
         />
         <Input
+          label="E-mail"
           type="email"
           placeholder="O seu melhor e-mail"
           value={email}
@@ -82,6 +84,7 @@ const ApoieUmaHortaPage = () => {
           disabled={loading}
         />
         <Textarea
+          label="Motivo para ser voluntário"
           placeholder="Porque quer ser voluntário? (disponibilidade, interesses, etc.)"
           value={motivo} // Mudei aqui
           onChange={(e) => setMotivo(e.target.value)} // Mudei aqui

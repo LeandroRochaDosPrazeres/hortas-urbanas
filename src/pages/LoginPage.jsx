@@ -28,6 +28,7 @@ const LoginPage = () => {
         <PageTitle>Aceder à sua Conta</PageTitle> {/* Mudei aqui para usar o PageTitle */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <Input
+            label="E-mail"
             type="email"
             placeholder="seu.email@exemplo.com"
             value={email}
@@ -35,6 +36,7 @@ const LoginPage = () => {
             required
           />
           <Input
+            label="Senha"
             type="password"
             placeholder="••••••••"
             value={password}

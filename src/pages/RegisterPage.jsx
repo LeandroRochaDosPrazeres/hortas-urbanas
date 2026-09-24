@@ -39,6 +39,7 @@ const RegisterPage = () => {
           
           {/* --- 4. CAMPO DE NOME ATIVADO --- */}
           <Input
+            label="Nome completo"
             type="text"
             placeholder="O seu nome completo"
             value={nome}
@@ -48,6 +49,7 @@ const RegisterPage = () => {
           {/* --- FIM DA ATIVAÇÃO --- */}
 
           <Input
+            label="E-mail"
             type="email"
             placeholder="seu.email@exemplo.com"
             value={email}
@@ -55,6 +57,7 @@ const RegisterPage = () => {
             required
           />
           <Input
+            label="Senha"
             type="password"
             placeholder="Crie uma palavra-passe forte"
             value={password}
