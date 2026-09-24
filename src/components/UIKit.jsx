@@ -54,7 +54,7 @@ export const Header = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <header className="bg-gray-800 shadow-lg border-b border-gray-700 sticky top-0 z-50">
+    <header className="bg-gray-800 shadow-lg border-b border-gray-700 sticky top-0 z-[1100]">
       <nav className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
@@ -81,7 +81,7 @@ export const Header = () => {
           </div>
           
           {/* ÁREA DE USUÁRIO DESKTOP */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden xl:flex items-center space-x-4">
             {currentUser?.role === 'admin' && (
               <Link 
                 to="/admin/usuarios" 
@@ -107,8 +107,9 @@ export const Header = () => {
           </div>
 
           {/* BOTÃO MOBILE */}
-          <div className="flex md:hidden">
-            <button onClick={toggleMenu} className="text-gray-400 hover:text-white p-2">
+          <div className="flex xl:hidden">
+            <button type="button" onClick={toggleMenu} aria-expanded={isMenuOpen} aria-controls="menu-mobile"
+              aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'} className="text-gray-400 hover:text-white p-2">
               {!isMenuOpen ? (
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -125,9 +126,15 @@ export const Header = () => {
 
       {/* MENU MOBILE */}
       {isMenuOpen && (
-        <div className="md:hidden bg-gray-900 border-t border-gray-700 px-4 pt-2 pb-6 space-y-1">
+        <div id="menu-mobile" className="xl:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto bg-gray-900 border-t border-gray-700 px-4 pt-2 pb-6 space-y-1">
           <MobileNavItem to="/" onClick={toggleMenu}>Home</MobileNavItem>
           <MobileNavItem to="/mapa" onClick={toggleMenu}>Mapa</MobileNavItem>
+          <MobileNavItem to="/plantas" onClick={toggleMenu}>Plantas</MobileNavItem>
+          <MobileNavItem to="/manutencao" onClick={toggleMenu}>Manutenção</MobileNavItem>
+          <MobileNavItem to="/forum" onClick={toggleMenu}>Fórum</MobileNavItem>
+          <MobileNavItem to="/agenda" onClick={toggleMenu}>Agenda</MobileNavItem>
+          <MobileNavItem to="/reportar" onClick={toggleMenu}>Reportar</MobileNavItem>
+          <MobileNavItem to="/apoie" onClick={toggleMenu}>Apoie</MobileNavItem>
           {currentUser?.role === 'admin' && (
             <MobileNavItem to="/admin/usuarios" onClick={toggleMenu}>
               <span className="text-yellow-500">⭐ Painel Admin</span>
