@@ -122,7 +122,7 @@ const ForumPage = () => {
             <p className="text-gray-300 mb-2 pr-6">{/* Adiciona 'pr-6' (padding) */}
               {post.texto}
             </p>
-            <small className="text-gray-500">
+            <small className="text-sm text-gray-400">
               Por: {post.autorNome?.trim() || 'Participante da comunidade'} -{' '}
               {post.criadoEm ? post.criadoEm.toDate().toLocaleString('pt-BR') : '...'}
             </small>
