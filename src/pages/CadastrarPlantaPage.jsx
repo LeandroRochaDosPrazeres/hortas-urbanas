@@ -102,7 +102,7 @@ const CadastrarPlantaPage = () => {
             onChange={(e) => setFormData({...formData, nomeCientifico: e.target.value})}
           />
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-xs text-gray-400 ml-1">Peso Médio (kg)</label>
               <Input 
@@ -148,14 +148,14 @@ const CadastrarPlantaPage = () => {
             onChange={(e) => setFormData({...formData, descricao: e.target.value})}
             required
           />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input 
-              placeholder="Exposição ao Sol" 
+              label="Exposição ao Sol"
               value={formData.sol}
               onChange={(e) => setFormData({...formData, sol: e.target.value})}
             />
             <Input 
-              placeholder="Frequência de Rega" 
+              label="Frequência de Rega"
               value={formData.rega}
               onChange={(e) => setFormData({...formData, rega: e.target.value})}
             />

@@ -92,9 +92,9 @@ const ReportarTerrenoPage = () => {
             </p>
           </fieldset>
           
-          <div className="grid grid-cols-2 gap-4">
-            <Input type="number" placeholder="Área (m²)" value={areaM2} onChange={(e)=>setAreaM2(e.target.value)} />
-            <Input type="number" placeholder="Famílias Estimadas" value={familias} onChange={(e)=>setFamilias(e.target.value)} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input label="Área (m²)" type="number" value={areaM2} onChange={(e)=>setAreaM2(e.target.value)} />
+            <Input label="Famílias Estimadas" type="number" value={familias} onChange={(e)=>setFamilias(e.target.value)} />
           </div>
 
           <Textarea placeholder="Descrição" value={descricao} onChange={(e)=>setDescricao(e.target.value)} rows={3} />
