@@ -11,6 +11,8 @@ const CadastrarPlantaPage = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [carregandoDados, setCarregandoDados] = useState(Boolean(id));
+  const [erroCarregamento, setErroCarregamento] = useState('');
 
   const [formData, setFormData] = useState({
     nome: '',
@@ -31,25 +33,33 @@ const CadastrarPlantaPage = () => {
 
   // useEffect para carregar os dados se for uma edição
   useEffect(() => {
+    let ativo = true;
+    setErroCarregamento('');
+    setCarregandoDados(Boolean(id && podeEditar));
     if (id && podeEditar) {
       const carregarDados = async () => {
         try {
           const planta = await getPlantaById(id); 
-          if (planta) {
-            setFormData(planta);
-          }
+          if (!planta) throw new Error('Planta não encontrada');
+          if (ativo) setFormData(planta);
         } catch (error) {
           console.error("Erro ao carregar dados da planta para edição:", error);
+          if (ativo) setErroCarregamento('Não foi possível carregar a espécie. Volte ao catálogo e tente novamente.');
+        } finally {
+          if (ativo) setCarregandoDados(false);
         }
       };
       carregarDados();
     }
+    return () => { ativo = false; };
   }, [id, podeEditar]);
 
   // Manter todos os hooks antes do bloqueio, inclusive ao encerrar a sessão.
   if (!podeEditar) {
     return <div className="p-10 text-center">Acesso restrito a especialistas de Biológicas.</div>;
   }
+  if (carregandoDados) return <p role="status" className="p-10 text-center">Carregando espécie...</p>;
+  if (erroCarregamento) return <p role="alert" className="p-10 text-center text-red-400">{erroCarregamento}</p>;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
