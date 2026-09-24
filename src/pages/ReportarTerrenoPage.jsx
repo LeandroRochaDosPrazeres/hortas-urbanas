@@ -21,12 +21,14 @@ const ReportarTerrenoPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setMensagem("");
     if (!currentUser) return setError("Você precisa estar logado.");
     if (!titulo || !endereco || !imagem) return setError("Preencha os campos obrigatórios.");
 
     setLoading(true);
     try {
-      const urlImagem = await uploadImage(imagem);
+      const urlImagem = await uploadImage(imagem, 'terrenos');
       
       const dadosHorta = {
         titulo,
@@ -35,17 +37,14 @@ const ReportarTerrenoPage = () => {
         imageUrl: urlImagem,
         areaM2: Number(areaM2),
         familiasAtendidas: Number(familias),
-        status: "pendente",
-        criadoEm: new Date(),
-        autorUid: currentUser.uid,
         latitude: -23.5505, // O ideal é capturar via GPS ou busca de endereço
         longitude: -46.6333
       };
 
-      await criarRelatorioTerreno(dadosHorta);
+      await criarRelatorioTerreno(currentUser.uid, dadosHorta);
       setMensagem("Terreno reportado com sucesso!");
       setTimeout(() => navigate('/mapa'), 2000);
-    } catch (err) {
+    } catch {
       setError("Erro ao enviar relatório.");
     } finally {
       setLoading(false);
