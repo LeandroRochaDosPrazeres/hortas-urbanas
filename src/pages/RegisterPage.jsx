@@ -68,17 +68,18 @@ const RegisterPage = () => {
 
           {/* --- 5. NOVO CAMPO DE SELEÇÃO DE ROLE --- */}
           <div className="space-y-2">
-            <label className="text-sm text-gray-400">Área de Atuação / Interesse:</label>
+            <label htmlFor="area-atuacao" className="text-sm text-gray-400">Área de Atuação / Interesse:</label>
             <select 
+              id="area-atuacao"
               value={role} 
               onChange={(e) => setRole(e.target.value)}
               className="w-full px-4 py-3 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:border-green-500"
             >
-              <option value="standard">Simpatizante (Visualizador)</option>
-              <option value="cultivador">Cultivador (Hortelão)</option>
-              <option value="biologicas">Especialista: Biológicas</option>
-              <option value="negocios">Especialista: Negócios / ESG</option>
-              <option value="direito">Especialista: Direito</option>
+              <option value="standard">Simpatizante</option>
+              <option value="cultivador">Cultivador</option>
+              <option value="biologicas">Biológicas</option>
+              <option value="negocios">Negócios / ESG</option>
+              <option value="direito">Direito</option>
             </select>
             {role !== 'standard' && (
               <p className="text-xs text-yellow-400 italic">* Perfis de especialista aguardam aprovação do admin.</p>
