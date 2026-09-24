@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getPlantaById } from '../services/firestoreService.js';
 import { Card, PageTitle, Button } from '../components/UIKit.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import semFoto from '../assets/sem-foto.svg';
 
 const possuiMetrica = (valor) =>
   (typeof valor === 'number' || typeof valor === 'string') &&
@@ -61,7 +62,9 @@ const PlantaDetailPage = () => {
         
         {/* COLUNA 1: Imagem e Dados Principais */}
         <div className="lg:col-span-1 space-y-6">
-          <img src={planta.imageUrl} alt={planta.nome} className="rounded-2xl w-full h-80 object-cover border border-gray-800 shadow-2xl" />
+          <img src={planta.imageUrl || semFoto} alt={planta.nome}
+            onError={(e) => { if (!e.currentTarget.src.endsWith(semFoto)) e.currentTarget.src = semFoto; }}
+            className="rounded-2xl w-full h-80 object-cover border border-gray-800 shadow-2xl" />
           
           <Card className="bg-gray-800/50 border-green-500/20">
             <h4 className="text-green-400 font-bold text-xs uppercase mb-3 tracking-widest">Identificação</h4>

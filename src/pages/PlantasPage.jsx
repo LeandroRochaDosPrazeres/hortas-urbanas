@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Card, Button, PageTitle } from '../components/UIKit.jsx';
 import { getPlantas, excluirPlanta } from '../services/firestoreService.js';
 import { useAuth } from '../context/AuthContext.jsx';
+import semFoto from '../assets/sem-foto.svg';
 
 const PlantasPage = () => {
   // --- 1. HOOKS E ESTADOS ---
@@ -92,7 +93,8 @@ const PlantasPage = () => {
                     <Link to={`/plantas/${planta.id}`}>
                       <Card className="p-0 overflow-hidden hover:ring-2 hover:ring-green-500 transition-all duration-300 h-full flex flex-col bg-gray-800/50">
                         <img 
-                          src={planta.imageUrl || 'https://via.placeholder.com/400x300?text=Sem+Foto'} 
+                          src={planta.imageUrl || semFoto}
+                          onError={(e) => { if (!e.currentTarget.src.endsWith(semFoto)) e.currentTarget.src = semFoto; }}
                           alt={planta.nome}
                           className="w-full h-48 object-cover"
                         />

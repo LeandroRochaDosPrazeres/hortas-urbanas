@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300" role="img" aria-label="Sem foto">
+  <rect width="400" height="300" fill="#1f2937" />
+  <path d="M200 150c-35 0-55-25-55-60 35 0 55 25 55 60Zm0 0c35 0 55-25 55-60-35 0-55 25-55 60Zm0 0v35" fill="none" stroke="#86efac" stroke-width="6" stroke-linecap="round" />
+  <text x="200" y="225" text-anchor="middle" fill="#d1d5db" font-family="sans-serif" font-size="24">Sem foto</text>
+</svg>
