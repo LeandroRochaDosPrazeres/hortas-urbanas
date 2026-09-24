@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Card } from '../components/UIKit';
 import { getTerrenos } from '../services/firestoreService.js';
@@ -18,6 +18,16 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+const EnquadrarTerrenos = ({ terrenos }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (terrenos.length) {
+      map.fitBounds(terrenos.map(t => [t.latitude, t.longitude]), { padding: [30, 30], maxZoom: 16 });
+    }
+  }, [map, terrenos]);
+  return null;
+};
+
 const MapPage = () => {
   const navigate = useNavigate();
   const defaultPosition = [-23.5505, -46.6333]; // São Paulo
@@ -31,7 +41,10 @@ const MapPage = () => {
         setLoading(true);
         const dados = await getTerrenos();
         // Filtra terrenos que possuem coordenadas válidas
-        const terrenosComCoords = dados.filter(t => t.latitude && t.longitude);
+        const terrenosComCoords = dados.filter(t =>
+          Number.isFinite(t.latitude) && Math.abs(t.latitude) <= 90 &&
+          Number.isFinite(t.longitude) && Math.abs(t.longitude) <= 180
+        );
         setTerrenos(terrenosComCoords);
       } catch (error) {
         console.error("Erro ao carregar mapa:", error);
@@ -46,6 +59,7 @@ const MapPage = () => {
     <Card>
       <div className="p-4">
         <h2 className="text-xl font-bold mb-4 text-white">Mapa de Hortas e Terrenos</h2>
+        {loading && <p role="status" className="mb-4 text-gray-300">Carregando locais...</p>}
         
         <div className="w-full h-[500px] bg-gray-800 rounded-xl overflow-hidden relative border border-gray-700 shadow-2xl">
           <MapContainer 
@@ -53,6 +67,7 @@ const MapPage = () => {
             zoom={12} 
             style={{ height: "100%", width: "100%" }}
           >
+            <EnquadrarTerrenos terrenos={terrenos} />
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

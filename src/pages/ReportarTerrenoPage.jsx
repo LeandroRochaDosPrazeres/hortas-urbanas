@@ -4,6 +4,21 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { criarRelatorioTerreno } from "../services/firestoreService.js";
 import { uploadImage } from "../services/storageService.js";
 import { useNavigate } from "react-router-dom";
+import { MapContainer, TileLayer, CircleMarker, useMapEvents } from "react-leaflet";
+
+const SeletorLocal = ({ localizacao, onSelect }) => {
+  const map = useMapEvents({ click: (e) => onSelect(map.wrapLatLng(e.latlng)) });
+  return (
+    <>
+      {localizacao && <CircleMarker center={localizacao} radius={10} />}
+      <span aria-hidden="true" className="absolute inset-0 z-[400] pointer-events-none flex items-center justify-center text-3xl text-gray-900">+</span>
+      <button type="button" onClick={() => onSelect(map.wrapLatLng(map.getCenter()))}
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[500] rounded bg-green-700 px-3 py-2 text-white">
+        Usar o centro do mapa
+      </button>
+    </>
+  );
+};
 
 const ReportarTerrenoPage = () => {
   const { currentUser } = useAuth();
@@ -15,6 +30,7 @@ const ReportarTerrenoPage = () => {
   const [areaM2, setAreaM2] = useState("");
   const [familias, setFamilias] = useState("");
   const [imagem, setImagem] = useState(null);
+  const [localizacao, setLocalizacao] = useState(null);
   const [loading, setLoading] = useState(false);
   const [mensagem, setMensagem] = useState("");
   const [error, setError] = useState("");
@@ -25,6 +41,7 @@ const ReportarTerrenoPage = () => {
     setMensagem("");
     if (!currentUser) return setError("Você precisa estar logado.");
     if (!titulo || !endereco || !imagem) return setError("Preencha os campos obrigatórios.");
+    if (!localizacao) return setError("Marque a localização do terreno no mapa.");
 
     setLoading(true);
     try {
@@ -37,8 +54,8 @@ const ReportarTerrenoPage = () => {
         imageUrl: urlImagem,
         areaM2: Number(areaM2),
         familiasAtendidas: Number(familias),
-        latitude: -23.5505, // O ideal é capturar via GPS ou busca de endereço
-        longitude: -46.6333
+        latitude: localizacao.lat,
+        longitude: localizacao.lng
       };
 
       await criarRelatorioTerreno(currentUser.uid, dadosHorta);
@@ -58,6 +75,22 @@ const ReportarTerrenoPage = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input placeholder="Título" value={titulo} onChange={(e)=>setTitulo(e.target.value)} />
           <Input placeholder="Endereço" value={endereco} onChange={(e)=>setEndereco(e.target.value)} />
+          <fieldset disabled={loading} className="space-y-2">
+            <legend className="font-medium">Localização do terreno (obrigatória)</legend>
+            <p className="text-sm text-gray-300">
+              Marque no mapa o local correspondente ao endereço. Pelo teclado, use as setas para mover o mapa e selecione “Usar o centro do mapa”.
+            </p>
+            <div className="relative isolate h-72 overflow-hidden rounded-lg">
+              <MapContainer center={[-23.5505, -46.6333]} zoom={12} style={{ height: '100%', width: '100%' }}>
+                <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <SeletorLocal localizacao={localizacao} onSelect={setLocalizacao} />
+              </MapContainer>
+            </div>
+            <p aria-live="polite" className="text-sm text-gray-300">
+              {localizacao ? `Ponto selecionado: ${localizacao.lat.toFixed(5)}, ${localizacao.lng.toFixed(5)}` : 'Nenhum ponto selecionado.'}
+            </p>
+          </fieldset>
           
           <div className="grid grid-cols-2 gap-4">
             <Input type="number" placeholder="Área (m²)" value={areaM2} onChange={(e)=>setAreaM2(e.target.value)} />
