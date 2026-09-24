@@ -192,6 +192,7 @@ const CadastrarPlantaPage = () => {
                 src={formData.imageUrl} 
                 alt="Preview" 
                 className="w-32 h-32 object-cover mx-auto rounded-lg shadow-md border border-gray-700"
+                onLoad={(e) => { e.currentTarget.style.display = ''; }}
                 onError={(e) => { e.target.style.display = 'none'; }} // Esconde se o link estiver quebrado
               />
             </div>
