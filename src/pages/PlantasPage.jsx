@@ -106,18 +106,18 @@ const PlantasPage = () => {
 
                     {/* BOTÕES DE GESTÃO (CRUD) - Visíveis apenas para quem tem permissão */}
                     {(currentUser?.role === 'admin' || currentUser?.role === 'biologicas') && (
-                      <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">
+                      <div className="absolute top-2 right-2 flex gap-2">
                         <Button 
                           onClick={() => navigate(`/plantas/editar/${planta.id}`)} 
                           variant="secondary" 
-                          className="bg-blue-600/90 hover:bg-blue-500 py-1 px-2 text-xs backdrop-blur-sm"
+                          className="bg-blue-600/90 hover:bg-blue-500 min-h-11 px-2 text-xs backdrop-blur-sm"
                         >
                           Editar
                         </Button>
                         <Button 
                           onClick={() => handleExcluir(planta.id, planta.nome)} 
                           variant="secondary" 
-                          className="bg-red-600/90 hover:bg-red-500 py-1 px-2 text-xs backdrop-blur-sm"
+                          className="bg-red-600/90 hover:bg-red-500 min-h-11 px-2 text-xs backdrop-blur-sm"
                         >
                           Excluir
                         </Button>
