@@ -167,8 +167,9 @@ export const Footer = () => (
 
 // --- Componentes de UI Reutilizáveis (O resto continua igual) ---
 
-export const Card = ({ children, className = "" }) => (
+export const Card = ({ children, title, className = "" }) => (
   <div className={`bg-gray-800 shadow-lg rounded-xl p-6 md:p-8 ${className}`}>
+    {title && <h2 className="text-xl font-semibold text-green-400 mb-4">{title}</h2>}
     {children}
   </div>
 );
@@ -195,12 +196,20 @@ export const Button = ({ as: Component = "button", children, variant = "primary"
   );
 };
 
-export const Input = ({ className = "", ...props }) => (
-  <input
-    className={`w-full px-4 py-3 bg-gray-700 text-white border border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent ${className}`}
-    {...props}
-  />
-);
+export const Input = ({ label, className = "", ...props }) => {
+  const input = (
+    <input
+      className={`w-full px-4 py-3 bg-gray-700 text-white border border-gray-600 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent ${className}`}
+      {...props}
+    />
+  );
+  return label ? (
+    <label className="block space-y-2">
+      <span className="text-sm text-gray-300">{label}</span>
+      {input}
+    </label>
+  ) : input;
+};
 
 export const Textarea = ({ className = "", ...props }) => (
   <textarea
