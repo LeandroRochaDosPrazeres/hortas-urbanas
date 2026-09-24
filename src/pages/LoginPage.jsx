@@ -58,12 +58,6 @@ const LoginPage = () => {
               Registe-se aqui.
             </Link>
           </p>
-          {/* TODO: Ligar a página de Recuperar Senha */}
-          <p>
-            <Link to="/recuperar-senha" className="hover:underline">
-              Esqueceu-se da senha?
-            </Link>
-          </p>
         </div>
       </Card>
     </div>
