@@ -27,14 +27,11 @@ const CadastrarPlantaPage = () => {
     imageUrl: '' // Mantido como string para receber a URL colada            
   });
 
-  // Bloqueio de segurança na renderização
-  if (currentUser?.role !== 'biologicas' && currentUser?.role !== 'admin') {
-    return <div className="p-10 text-center">Acesso restrito a especialistas de Biológicas.</div>;
-  }
+  const podeEditar = currentUser?.role === 'biologicas' || currentUser?.role === 'admin';
 
   // useEffect para carregar os dados se for uma edição
   useEffect(() => {
-    if (id) {
+    if (id && podeEditar) {
       const carregarDados = async () => {
         try {
           const planta = await getPlantaById(id); 
@@ -47,7 +44,12 @@ const CadastrarPlantaPage = () => {
       };
       carregarDados();
     }
-  }, [id]);
+  }, [id, podeEditar]);
+
+  // Manter todos os hooks antes do bloqueio, inclusive ao encerrar a sessão.
+  if (!podeEditar) {
+    return <div className="p-10 text-center">Acesso restrito a especialistas de Biológicas.</div>;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
